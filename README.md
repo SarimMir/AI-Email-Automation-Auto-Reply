@@ -1,6 +1,6 @@
 # 🌟 StyleSync AI Mail
 ### AI-Powered Email Drafting & Auto-Reply System
-**SafeX Internship — Week 3 | Group 53**
+
 
 > **Target Company:** StyleSync — E-commerce Clothing Brand  
 > **Difficulty:** Advanced | **Tools:** Python, Flask, ChromaDB, OpenAI/Gemini, RAG
