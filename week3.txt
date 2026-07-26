@@ -1,0 +1,21 @@
+OBJECTIVE:
+Design an AI email-drafting/auto-reply system for the company's customer or sales inbox.
+
+SCOPE / STEP-BY-STEP TASKS:
+- Collect 15-20 sample real-world email queries typical for this company/industry.
+- Design prompt templates that classify intent and draft an appropriate reply.
+- Build a working prototype (Python script or notebook) that takes an email and returns a draft reply.
+- Add a human-review step before any email is actually sent.
+- Assume your target company is an e-commerce clothing brand (or substitute a real company in the same space if you prefer, and note the substitution).
+- Coordinate with your Group Leader (Hassnain ali) and the rest of Group 53 so your module integrates cleanly with your teammates' modules of the same project - avoid duplicating anyone else's work.
+
+DELIVERABLES:
+- Working prototype with sample input/output
+- Prompt template documentation
+- Before/after example emails
+
+REQUIRED TOOLS/SKILLS: Python, an LLM API (OpenAI/Anthropic/etc.), LangChain/CrewAI/AutoGen (optional), a vector DB for RAG tasks
+SKILLS LEARNED: Applied AI/ML, prompt engineering, AI solution design, business-process analysis
+DIFFICULTY: Advanced    |    ESTIMATED TIME: 5-7 days (Week 3)
+
+SUBMISSION REQUIREMENTS: Weekly Progress Report (PDF) | Daily Work Log | Research/Working Notes | Screenshots or Evidence | GitHub Repository (if applicable) | Demo Video (5-10 min, HD, face visible) | Presentation Slides | Problems Encountered & Solutions | Next Week's Plan
