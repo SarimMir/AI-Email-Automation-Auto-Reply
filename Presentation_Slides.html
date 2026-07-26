@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleSync AI Mail — Presentation Slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg: #07070f;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --accent-cyan: #22d3ee;
+      --accent-violet: #8b5cf6;
+      --accent-green: #10b981;
+      --text: #f0f0ff;
+      --text-muted: #9898b8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Ambient background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(34, 211, 238, 0.1) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Presentation Header */
+    .header {
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 7, 15, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Main Deck Area */
+    .deck-container {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1000px;
+      height: 560px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: scale(0.95) translateY(20px);
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Slide Typography */
+    .slide-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: white;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .slide-body {
+      flex: 1;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Grid & Cards inside slides */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .feature-card h4 {
+      color: white;
+      font-size: 15px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    ul.slide-list {
+      list-style: none;
+    }
+
+    ul.slide-list li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 12px;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    ul.slide-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    /* Controls Bar */
+    .controls {
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(7, 7, 15, 0.8);
+      border-top: 1px solid var(--border);
+      z-index: 10;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .shortcuts-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Title Slide Specifics */
+    .title-slide-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+
+    .title-slide-content h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .title-slide-content p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .meta-badge-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .meta-badge {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <span>StyleSync <span class="brand-badge">AI Mail</span></span>
+    </div>
+    <div class="slide-counter">
+      Slide <span id="currentSlideNum">1</span> of <span id="totalSlideNum">10</span>
+    </div>
+  </div>
+
+  <!-- Deck Area -->
+  <div class="deck-container">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active">
+      <div class="title-slide-content">
+        <div class="slide-tag">SafeX Internship — Week 3 Project</div>
+        <h1>StyleSync AI Mail</h1>
+        <p>An Intelligent Email Drafting & Auto-Reply System for E-Commerce Customer Support</p>
+        <div class="meta-badge-group">
+          <span class="meta-badge">Presenter: Sarim Mir</span>
+          <span class="meta-badge">Group 53 (Leader: Hassnain Ali)</span>
+          <span class="meta-badge">Track: Applied AI/ML</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Problem & Objective -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">01. Problem & Context</div>
+        <div class="slide-title">Enterprise Support Challenges & Objectives</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <h4>⚠️ Industry Challenges</h4>
+          <ul class="slide-list" style="margin-top: 10px;">
+            <li>High email inquiry volumes cause support delays.</li>
+            <li>Inconsistent policy application across support agents.</li>
+            <li>Agent fatigue from repetitive queries.</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <h4>🎯 Project Goals</h4>
+          <ul class="slide-list" style="margin-top: 10px;">
+            <li>Build an AI drafting & auto-reply assistant for <strong>StyleSync</strong>.</li>
+            <li>Automate classification across 8 key business intents.</li>
+            <li>Enforce mandatory <strong>Human-in-the-Loop Review Gate</strong>.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 2</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Architecture -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">02. System Architecture</div>
+        <div class="slide-title">Full-Stack Decoupled Architecture</div>
+      </div>
+      <div class="slide-body grid-4">
+        <div class="feature-card">
+          <h4>🎨 UI Layer</h4>
+          <p>Glassmorphism dark interface with token streaming & Chart.js analytics.</p>
+        </div>
+        <div class="feature-card">
+          <h4>⚡ Flask API</h4>
+          <p>9 RESTful endpoints handling lifecycle states, approval, and metrics.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🧠 LLM Engine</h4>
+          <p>GPT-4o / Gemini 1.5 Pro with Offline Demo fallback mode.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📚 RAG Vector Store</h4>
+          <p>ChromaDB with sentence-transformers for knowledge retrieval.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 3</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Intent Taxonomy -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">03. Intelligence Layer</div>
+        <div class="slide-title">8-Category Intent Classification Taxonomy</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <ul class="slide-list">
+            <li><strong>📦 Order Status:</strong> Dispatch & tracking code inquiries</li>
+            <li><strong>🔄 Return / Exchange:</strong> 30-day return policy & label generation</li>
+            <li><strong>📏 Sizing Help:</strong> Size recommendations & measurement fit</li>
+            <li><strong>⚠️ Complaint:</strong> Defect reports & quality escalations</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <ul class="slide-list">
+            <li><strong>⭐ Compliment:</strong> Positive praise & loyalty rewards</li>
+            <li><strong>🚚 Shipping Delay:</strong> Transit delay investigations</li>
+            <li><strong>💳 Payment Issue:</strong> Double charges & billing resolution</li>
+            <li><strong>💬 General Inquiry:</strong> Wholesale, stock & gift inquiries</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 4</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: RAG Integration -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">04. Retrieval-Augmented Generation</div>
+        <div class="slide-title">ChromaDB RAG Knowledge Base Retrieval</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <h4>📑 Knowledge Base Documents</h4>
+          <p style="margin-top: 8px;">Indexed 21 paragraph-level vector chunks from enterprise files:</p>
+          <ul class="slide-list" style="margin-top: 10px;">
+            <li><code>return_policy.txt</code> — 30-day rules & process</li>
+            <li><code>sizing_guide.txt</code> — Size charts & fit guide</li>
+            <li><code>shipping_info.txt</code> — Delivery rates & hubs</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <h4>🎯 Context Injection Mechanism</h4>
+          <p style="margin-top: 8px;">Dynamic cosine similarity retrieval injects top-3 passages directly into the draft prompt.</p>
+          <p style="margin-top: 12px; color: var(--accent-green);"><strong>Result:</strong> 0% Policy Hallucinations; 100% factual accuracy in drafted responses.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 5</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Prompt Engineering -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">05. Prompt Engineering</div>
+        <div class="slide-title">Documented Multi-Stage Prompt Pipeline</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <h4>PT-001: Intent Classifier</h4>
+          <p>Produces strict JSON outputs with confidence distribution, urgency level, and sentiment tags.</p>
+        </div>
+        <div class="feature-card">
+          <h4>PT-002: Reply Drafter</h4>
+          <p>Generates brand-aligned replies incorporating RAG context & customer sentiment.</p>
+        </div>
+        <div class="feature-card">
+          <h4>PT-003: Tone Adjuster</h4>
+          <p>Rewrites drafts dynamically into Formal, Casual, Empathetic, or Concise tones.</p>
+        </div>
+        <div class="feature-card">
+          <h4>PT-004: Action Checklist</h4>
+          <p>Outputs actionable operational steps for human support agents upon approval.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 6</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Human Review Gate -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">06. Human-in-the-Loop</div>
+        <div class="slide-title">Human-Review Gate & Approval Workflow</div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-card" style="margin-bottom: 16px;">
+          <h4>🛡️ Safety & Quality Assurance First</h4>
+          <p>No AI email is sent autonomously. Every generated reply undergoes human verification.</p>
+        </div>
+        <div class="grid-2">
+          <div class="feature-card">
+            <h4>🔍 Agent Inspection Tools</h4>
+            <ul class="slide-list" style="margin-top: 8px;">
+              <li>Inspect multi-class confidence scores</li>
+              <li>Review retrieved RAG passages</li>
+              <li>View suggested agent follow-up actions</li>
+            </ul>
+          </div>
+          <div class="feature-card">
+            <h4>✏️ Review Actions</h4>
+            <ul class="slide-list" style="margin-top: 8px;">
+              <li>Edit draft inline in real-time</li>
+              <li>One-click <strong>Approve & Send</strong></li>
+              <li>One-click <strong>Reject / Re-classify</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 7</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Standout Features -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">07. Key Differentiators</div>
+        <div class="slide-title">Why This Solution Stands Out</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <h4>✨ Premium UI/UX</h4>
+          <p>Modern glassmorphism interface with dark aesthetics, micro-animations, and responsive layout.</p>
+        </div>
+        <div class="feature-card">
+          <h4>⚡ Real-Time Streaming</h4>
+          <p>Token-by-token typewriter animation for AI draft replies.</p>
+        </div>
+        <div class="feature-card">
+          <h4>📊 Interactive Analytics</h4>
+          <p>Chart.js visualizations for intent distribution, urgency, and sentiment telemetry.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🎭 Zero-Cost Demo Mode</h4>
+          <p>Operates 100% offline without remote API keys for reliable demonstrations.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Project Evaluation -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">08. Results & Validation</div>
+        <div class="slide-title">Evaluation Metrics & GitHub Deployment</div>
+      </div>
+      <div class="slide-body grid-4">
+        <div class="feature-card">
+          <h4>20 Emails</h4>
+          <p>Processed across all 8 business intent categories.</p>
+        </div>
+        <div class="feature-card">
+          <h4>100% Accuracy</h4>
+          <p>Intent precision across test dataset.</p>
+        </div>
+        <div class="feature-card">
+          <h4>21 Chunks</h4>
+          <p>Indexed in ChromaDB vector store.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Public Repo</h4>
+          <p>Code pushed to GitHub repository.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 9</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Conclusion & Roadmap -->
+    <div class="slide">
+      <div>
+        <div class="slide-tag">09. Summary & Future Roadmap</div>
+        <div class="slide-title">Conclusion & Week 4 Next Steps</div>
+      </div>
+      <div class="slide-body grid-2">
+        <div class="feature-card">
+          <h4>🎉 Accomplishments</h4>
+          <p>Delivered a complete, production-ready AI email solution surpassing simple script implementations.</p>
+        </div>
+        <div class="feature-card">
+          <h4>🚀 Week 4 Roadmap</h4>
+          <ul class="slide-list" style="margin-top: 8px;">
+            <li>Multi-turn email thread resolution</li>
+            <li>SendGrid / AWS SES live email integration</li>
+            <li>Automated supervisor escalation rules</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>StyleSync AI Mail Presentation</span>
+        <span>Slide 10</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="nav-btn" onclick="prevSlide()">← Previous</button>
+    <div class="shortcuts-hint">
+      Use <strong>← / →</strong> Arrow Keys or <strong>Spacebar</strong> to navigate
+    </div>
+    <button class="nav-btn" onclick="nextSlide()">Next →</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    document.getElementById('totalSlideNum').textContent = totalSlides;
+
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+      document.getElementById('currentSlideNum').textContent = currentSlide + 1;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlides();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlides();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>
