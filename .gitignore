@@ -25,3 +25,10 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Submission reports & presentation slides (kept local only)
+Weekly_Progress_Report.*
+Daily_Work_Log.md
+Presentation_Slides.*
+Problems_Encountered_and_Solutions.md
+
