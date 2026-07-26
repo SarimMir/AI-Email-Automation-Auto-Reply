@@ -209,7 +209,7 @@ Then open: **http://localhost:5000**
 
 ## 👤 Author
 
-**Sarim Mir** — Group 53 | SafeX AI Internship Week 3  
+**Muhammad Sarim Mir**   
 GitHub: [@SarimMir](https://github.com/SarimMir)
 
 ---
