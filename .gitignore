@@ -26,9 +26,16 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Submission reports & presentation slides (kept local only)
+# Submission reports, presentation slides & video assets (kept local only)
 Weekly_Progress_Report.*
-Daily_Work_Log.md
+Daily_Work_Log.*
 Presentation_Slides.*
 Problems_Encountered_and_Solutions.md
+StyleSync_AI_Mail_*
+voiceover*.wav
+make_voiceover*.ps1
+generate_*.py
+video_assets/
+Demo_Video_Player.html
+
 
